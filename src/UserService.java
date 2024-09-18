@@ -4,68 +4,92 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 public class UserService implements UserServiceInterface {
-    String url = "jdbc:mysql://localhost/javamysql";
-    String username = "root";
-    String password = "160304";
+    private static final String URL = "jdbc:mysql://localhost/javamysql";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "160304";
+
+    private Connection getConnection() throws SQLException, ClassNotFoundException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+    }
 
     public User findById(Long id) {
+        String sql = "SELECT * FROM user WHERE id = ?";
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Driver loaded!");
-            Connection connection = DriverManager.getConnection(url, username, password);
-            String sql = "SELECT * FROM user where id =" + id;
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            User user = new User();
-            while (resultSet.next()) {
-                user.setAddress(resultSet.getString("address"));
-                user.setAge(resultSet.getLong("age"));
-                user.setEmail(resultSet.getString("email"));
-                user.setFirstName(resultSet.getString("firstName"));
-                user.setId(resultSet.getLong("id"));
-                user.setLastName(resultSet.getString("lastName"));
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    User user = new User();
+                    user.setAddress(resultSet.getString("address"));
+                    user.setAge(resultSet.getLong("age"));
+                    user.setEmail(resultSet.getString("email"));
+                    user.setFirstName(resultSet.getString("firstName"));
+                    user.setId(resultSet.getLong("id"));
+                    user.setLastName(resultSet.getString("lastName"));
+                    return user;
+                }
             }
-            connection.close();
-            if (user == null)
-                return user;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public Boolean deleteUserBydId(Long id) {
+    public void deleteUserBydId(Long id) {
         String sql = "DELETE FROM user WHERE id = ?";
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Driver loaded!");
-            Connection connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement statement = connection.prepareStatement(sql);
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
             statement.setLong(1, id);
-            int rowsDeleted = statement.executeUpdate();
-            connection.close();
-            return rowsDeleted > 0;
-        } catch (ClassNotFoundException | SQLException e) {
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("User with ID " + id + " deleted successfully.");
+            } else {
+                System.out.println("No user found with ID " + id);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     @Override
     public List<User> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        String sql = "SELECT * FROM user";
+        List<User> users = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                User user = new User();
+                user.setAddress(resultSet.getString("address"));
+                user.setAge(resultSet.getLong("age"));
+                user.setEmail(resultSet.getString("email"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setId(resultSet.getLong("id"));
+                user.setLastName(resultSet.getString("lastName"));
+                users.add(user);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
     @Override
     public User updateById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateById'");
+        // Implementation depends on what fields you want to update
+        // This is a placeholder implementation
+        throw new UnsupportedOperationException("Method 'updateById' needs to be implemented");
     }
-
 }
