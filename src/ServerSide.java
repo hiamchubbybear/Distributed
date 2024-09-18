@@ -13,8 +13,8 @@ public class ServerSide {
             UserService service = new UserService();
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
-                        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+                     PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
 
                     System.out.println("Client connected");
 
@@ -44,10 +44,10 @@ public class ServerSide {
                                     out.println(service.findById(id).toString());
                                 }
                                 break;
-                            case 2:
+                            case 3:
                                 out.println("Please input an id to delete. (Long) ");
-                                Long id  = Long.parseLong(in.readLine());
-                                if(service.findById(id) == null) {
+                                Long id = Long.parseLong(in.readLine());
+                                if (service.findById(id) == null) {
                                     System.out.println("ID is not found");
                                     out.println("Your id is not valid ");
                                 } else {
@@ -55,9 +55,27 @@ public class ServerSide {
                                     out.println("User deleted successfully");
                                 }
                                 break;
-                            case 3:
-                                out.println("Delete user functionality not implemented yet.");
-                                out.println();
+                            case 2:
+                                out.println("Please enter user details.");
+                                out.println("ID: ");
+                                Long uid = Long.parseLong(in.readLine());
+                                if (service.findById(uid) != null) {
+                                    out.println("UserID already exists please input another id");
+                                    break;
+                                }
+                                out.println("Firstname: ");
+                                String firstName = in.readLine();
+                                out.println("Lastname: ");
+                                String lastName = in.readLine();
+                                out.println("Address: ");
+                                String address = in.readLine();
+                                out.println("Age: ");
+                                Long age = Long.parseLong(in.readLine());
+                                out.println("Email: ");
+                                String email = in.readLine();
+                                User user = new User(address, age, firstName, lastName, uid, email);
+                                var respone = service.addUser(user);
+                                out.println(respone.toString());
                                 break;
                             case 4:
                                 out.println("Update user functionality not implemented yet.");
@@ -87,8 +105,8 @@ public class ServerSide {
         out.println("Please choose an option (number):");
         out.println("0. Exit");
         out.println("1. Find by ID");
-        out.println("2. Insert a user");
-        out.println("3. Delete a user");
+        out.println("2. Delete a user");
+        out.println("3. Insert a user");
         out.println("4. Update a user");
         out.println("5. List all users");
         out.println();

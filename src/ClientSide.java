@@ -45,7 +45,30 @@ public class ClientSide {
                         }
                         System.out.println("Server response: " + response);
                     }
-                    if(choice == 2){
+                    if (choice == 2)  {
+                        System.out.print("ID: ");
+                        Long  id = scanner.nextLong();
+                        scanner.nextLine();
+                        writer.println(id);
+                        System.out.print("Firstname: " );
+                        String firstName = scanner.nextLine();
+                        writer.println(firstName);
+                        System.out.print("Lastname: " );
+                        String lastName = scanner.nextLine();
+                        writer.println(lastName);
+                        System.out.print("Address: ");
+                        String address = scanner.nextLine();
+                        writer.println(address);
+                        System.out.print("Age: ");
+                        Long age = scanner.nextLong();
+                        scanner.nextLine();
+                        writer.println(age);
+                        System.out.print("Email: ");
+                        String email = scanner.nextLine();
+                        writer.println(email);
+                    }
+
+                    if (choice == 3) {
                         Long id = scanner.nextLong();
                         writer.println(id);
                         response = reader.readLine();
