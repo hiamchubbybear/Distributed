@@ -78,6 +78,10 @@ public class ClientSide {
                         }
                         System.out.println("Server response: " + response);
                     }
+                    if(choice ==5 ) {
+                        String respone = reader.readLine();
+                        System.out.println("Data recieved: " + respone);
+                    }
                 } else {
                     System.out.println(line);
                 }

@@ -9,7 +9,7 @@ public interface UserServiceInterface {
 
     public List<User> findAll();
 
-    public User updateById(Long id);
+    public User updateById(Long id , User user );
 
     public User addUser(User user);
 }
