@@ -3,7 +3,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 
 public class ServerSide {
     private static final int PORT = 1234;
@@ -11,8 +10,8 @@ public class ServerSide {
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server is listening on port " + PORT);
-            UserService service = new UserService();
-            UserController controller = new UserController();
+            StudentService service = new StudentService();
+            StudentController controller = new StudentController();
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
                      PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -35,20 +34,22 @@ public class ServerSide {
                                 out.println();
                                 return;
                             case 1:
-                                controller.getById(in,out);
+                                controller.getById(in, out);
                                 break;
                             case 3:
-                                controller.deleteById(in,out);
+                                controller.deleteById(in, out);
                                 break;
                             case 2:
-                                controller.addUser(in,out);
+                                controller.addUser(in, out);
                                 break;
                             case 4:
-                                out.println("Update user functionality not implemented yet.");
-                                out.println();
+                                controller.updateStudent(out, in);
                                 break;
                             case 5:
-                                controller.listALl(in,out);
+                                controller.listALl(in, out);
+                                break;
+                            case 6:
+                                controller.findByName(out, in);
                                 break;
                             default:
                                 out.println("Invalid option. Please try again.");

@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientSide {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int port = 1234;
         String ip = "localhost";
         Scanner scanner = new Scanner(System.in);
@@ -45,15 +45,15 @@ public class ClientSide {
                         }
                         System.out.println("Server response: " + response);
                     }
-                    if (choice == 2)  {
+                    if (choice == 2) {
                         System.out.print("ID: ");
-                        Long  id = scanner.nextLong();
+                        Long id = scanner.nextLong();
                         scanner.nextLine();
                         writer.println(id);
-                        System.out.print("Firstname: " );
+                        System.out.print("Firstname: ");
                         String firstName = scanner.nextLine();
                         writer.println(firstName);
-                        System.out.print("Lastname: " );
+                        System.out.print("Lastname: ");
                         String lastName = scanner.nextLine();
                         writer.println(lastName);
                         System.out.print("Address: ");
@@ -78,9 +78,29 @@ public class ClientSide {
                         }
                         System.out.println("Server response: " + response);
                     }
-                    if(choice ==5 ) {
+                    if (choice == 4) {
+                        System.out.print("Enter ID: ");
+                        Long id = scanner.nextLong();
+                        writer.println(id);
+                        response = reader.readLine();
+                        if (response == null) {
+                            System.out.println("Respone not found");
+                        } else {
+                            System.out.println("Server response: " + response);
+                        }
+                    }
+                    if (choice == 5) {
                         String respone = reader.readLine();
                         System.out.println("Data recieved: " + respone);
+                    }
+                    if (choice == 6) {
+                        scanner.nextLine();
+                        String firstName = scanner.nextLine();
+                        writer.println(firstName);
+                        String lastName = scanner.nextLine();
+                        writer.println(lastName);
+                        String response1 = reader.readLine();
+                        System.out.println("Data received: " + response1);
                     }
                 } else {
                     System.out.println(line);

@@ -1,4 +1,4 @@
-public class User {
+public class Student {
     Long id;
     String firstName;
     String lastName;
@@ -6,16 +6,16 @@ public class User {
     Long age;
     String email;
 
-    public User() {
+    public Student() {
     }
 
-    public User(String address, Long age, String email, String firstName, Long id, String lastName) {
+    public Student(Long id, String firstName, String lastName, String address, Long age, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.address = address;
         this.age = age;
         this.email = email;
-        this.firstName = firstName;
-        this.id = id;
-        this.lastName = lastName;
     }
 
     public Long getId() {
